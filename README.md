@@ -5,7 +5,8 @@
 
 ```bash
 yarn build && yarn start
-
+```
+```bash
 # or if you don't have yarn
 npm run build && npm start
 ```
