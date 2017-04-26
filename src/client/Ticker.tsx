@@ -28,24 +28,24 @@ function CurrencyList(props: { data: void | t.I_CurrencyState }) {
       const pair = props.data[key]
       let style = {}
 
-      if (pair.bid > pair.ask) {
-        style = { color: 'green' }
-      }
-
       if (isExpired(pair)) {
-        style = { color: 'red' }
+        style = { color: 'gray' }
       }
 
       const sources = Object.keys(pair.sources).map(key => pair.sources[key])
       const activeSourcesCount = sources.filter(Boolean).length
       const sourcesCount = sources.length
 
+      const errors = activeSourcesCount === 0
+        ? <div className='errors'>Feed has errors</div>
+        : null
+
       return <li key={key} style={style}>
         <div className='symbol'>{pair.baseCurrency}/{pair.quoteCurrency}</div>
         <div className='info'>
-          ask: {pair.ask}<br />
-          bid: {pair.bid}<br />
+          <div className='value'>{pair.ask}</div>
           sources: {activeSourcesCount} of {sourcesCount}
+          {errors}
         </div>
       </li>
     })}
