@@ -22,6 +22,7 @@ export const Fixture = {
         Observable.timer(Math.floor((v % 5) * 500 * Math.random()))
       )
       .map(i => lines[i % lines.length])
+      .filter(line => !!line)
 
     return line$.map(line => {
       const [ask, bid] = line.split(',').map(Number)
