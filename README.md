@@ -1,6 +1,6 @@
 # Ticker
 
-![Architecture](https://lh6.googleusercontent.com/52V1mz5fyFRUf9BBTp-DIXzcGZ4-5ut8iDfjv3DZniak7W0Ki3WQ8HULRwJlld157LPYrdSk1a30zG0=w1221-h850)
+![Architecture](architecture.png)
 
 ## Running
 
