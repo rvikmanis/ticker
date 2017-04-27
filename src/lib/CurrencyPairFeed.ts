@@ -133,7 +133,7 @@ export default class CurrencyPairFeed extends Observable<Payload> {
     )
 
     this.source = Observable
-      .combineLatest(...sources)
-      .map(snapshots => combiner({ snapshots, symbol, ttl, significantDigits }))
+      .combineLatest(Observable.timer(0, ttl), ...sources)
+      .map(([i, ...snapshots]) => combiner({ snapshots, symbol, ttl, significantDigits }))
   }
 }

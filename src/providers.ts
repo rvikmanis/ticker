@@ -43,6 +43,42 @@ export const Fixture = {
   }
 }
 
+export const BlockChain = new PeriodicHttpCurrencyPairProvider({
+  configurator(config) {
+    const { symbol, ttl } = config
+
+    if (symbol.slice(0, 3) !== 'BTC') {
+      throw new Error('BlockChain provider only works with BTC as base currency')
+    }
+
+    return {
+      url: `https://blockchain.info/tobtc?currency=${symbol.slice(3, 6).toUpperCase()}&value=1`,
+      period: ttl,
+      source: `blockchain:${symbol}`
+    }
+  },
+
+  mapper(snap) {
+    const { data, error } = snap
+
+    if (error) {
+      throw error
+    }
+
+    const value = parseFloat(data)
+
+    if (isNaN(value)) {
+      throw new Error(`Cannot parse data: ${data}`)
+    }
+
+    const ask = 1 / value
+    const bid = ask
+    const timestamp = Number(new Date())
+
+    return { bid, ask, timestamp }
+  }
+})
+
 export const BitStamp = new PeriodicHttpCurrencyPairProvider({
   configurator(config) {
     const { symbol, ttl } = config
@@ -55,19 +91,19 @@ export const BitStamp = new PeriodicHttpCurrencyPairProvider({
   },
 
   mapper(snap) {
-    const { data: rawData, error } = snap
+    const { data, error } = snap
 
     if (error) {
       throw error
     }
 
-    let { timestamp, bid, ask } = JSON.parse(<string>rawData)
+    let { timestamp, bid, ask } = JSON.parse(<string>data)
     timestamp = Number(timestamp) * 1000
     bid = Number(bid)
     ask = Number(ask)
 
     if (isNaN(timestamp) || isNaN(bid) || isNaN(ask)) {
-      throw new Error(`Cannot parse data: ${rawData}`)
+      throw new Error(`Cannot parse data: ${data}`)
     }
 
     return { timestamp, bid, ask }

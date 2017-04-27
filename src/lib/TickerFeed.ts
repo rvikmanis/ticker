@@ -35,8 +35,10 @@ export default class TickerFeed extends Observable<Payload> {
     this.sourcedPairs = <SourcedPair[]>currencyPairs.filter(pair => pair.providers)
     this.computedPairs = <ComputedPair[]>currencyPairs.filter(pair => pair.computed)
 
+    const feeds = this.sourcedPairs.map(pair => new CurrencyPairFeed(pair))
+
     this.source = Observable
-      .combineLatest(...this.sourcedPairs.map(pair => new CurrencyPairFeed(pair)))
+      .combineLatest(...feeds)
       .map(pairs => {
         let out: Payload = {}
         pairs.forEach(pair => {

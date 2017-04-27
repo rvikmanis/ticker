@@ -1,22 +1,17 @@
-import { BitStamp, Fixture } from './providers'
+import { BitStamp, BlockChain, Fixture } from './providers'
 import TickerFeed from "./lib/TickerFeed";
 
 const currencyPairs = [
 	{
 		symbol: 'EURUSD',
-		ttl: 2000,
 		providers: [BitStamp],
 	},
 	{
 		symbol: 'BTCUSD',
-		providers: [BitStamp]
+		providers: [BitStamp, BlockChain]
 	},
 	{
 		symbol: 'BTCEUR',
-		computed: <true>true,
-	},
-	{
-		symbol: 'USDEUR',
 		computed: <true>true,
 	}
 ]

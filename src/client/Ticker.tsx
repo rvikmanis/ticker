@@ -7,17 +7,6 @@ type Props = {
   data?: void | t.I_CurrencyState
 }
 
-function isExpired(pair: any) {
-  const { timestamp, ttl } = pair
-  const now = Number(new Date())
-
-  if ((timestamp + ttl + GRACE_TIME) <= (now)) {
-    return true
-  }
-
-  return false
-}
-
 function CurrencyList(props: { data: void | t.I_CurrencyState }) {
   if (!props.data) {
     return null
@@ -26,11 +15,6 @@ function CurrencyList(props: { data: void | t.I_CurrencyState }) {
   return <ul>
     {Object.keys(props.data).map(key => {
       const pair = props.data[key]
-      let style = {}
-
-      if (isExpired(pair)) {
-        style = { color: 'gray' }
-      }
 
       const sources = Object.keys(pair.sources).map(key => pair.sources[key])
       const activeSourcesCount = sources.filter(Boolean).length
@@ -40,11 +24,15 @@ function CurrencyList(props: { data: void | t.I_CurrencyState }) {
         ? <div className='errors'>Feed has errors</div>
         : null
 
-      return <li key={key} style={style}>
+      const sourcesLine = ((sourcesCount === 1) && ('computed' in pair.sources))
+        ? 'computed'
+        : `sources: ${activeSourcesCount} of ${sourcesCount}`
+
+      return <li key={key}>
         <div className='symbol'>{pair.baseCurrency}/{pair.quoteCurrency}</div>
         <div className='info'>
           <div className='value'>{pair.ask}</div>
-          sources: {activeSourcesCount} of {sourcesCount}
+          {sourcesLine}
           {errors}
         </div>
       </li>

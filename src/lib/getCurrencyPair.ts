@@ -35,7 +35,6 @@ export default function getCurrencyPair(symbol: string, state: t.I_CurrencyState
     }
 
     const ttl = Math.min(basePair.ttl, quotePair.ttl)
-    const sources = { ...basePair.sources, ...quotePair.sources }
 
     if (basePair.errors || quotePair.errors) {
 
@@ -45,7 +44,7 @@ export default function getCurrencyPair(symbol: string, state: t.I_CurrencyState
         quoteCurrency,
         errors,
         ttl,
-        sources,
+        sources: <any>{ computed: false },
       }
 
     } else {
@@ -58,7 +57,7 @@ export default function getCurrencyPair(symbol: string, state: t.I_CurrencyState
         bid: (<number>basePair.bid) * (1 / (<number>quotePair.ask)),
         timestamp,
         ttl,
-        sources,
+        sources: <any>{ computed: true },
       }
 
     }
